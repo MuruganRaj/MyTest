@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="2"
+    android:layout_gravity="center_horizontal"
+    android:layout_height="wrap_content">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/mobileNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:autofillHints="@string/emailormobileno"
+            android:hint="@string/emailormobileno"
+            android:inputType="number"
+            app:met_autoValidate="false"
+            app:met_bottomTextSize="8dp"
+            app:met_clearButton="true"
+            app:met_errorColor="@android:color/holo_red_dark"
+            app:met_floatingLabel="normal"
+            android:maxLength="10"
+                android:layout_weight="1"
+            app:met_floatingLabelAlwaysShown="false"
+            app:met_floatingLabelAnimating="true"
+            app:met_floatingLabelPadding="8dp"
+            app:met_floatingLabelText="@string/emailormobileno"
+            app:met_floatingLabelTextSize="14dp"
+            app:met_helperText=""
+            app:met_helperTextAlwaysShown="false"
+            app:met_helperTextColor="@android:color/background_dark"
+            app:met_iconPadding="8dp"
+            app:met_singleLineEllipsis="true"
+            app:met_underlineColor="@color/white" />
+
+    <Button
+        android:id="@+id/sendOtp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+
+        android:text="Send Otp"/>
+
+</LinearLayout>
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/otp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:autofillHints="@string/otp"
+                android:hint="@string/otp"
+                android:inputType="number"
+                app:met_autoValidate="false"
+                app:met_bottomTextSize="8dp"
+                app:met_clearButton="true"
+                app:met_errorColor="@android:color/holo_red_dark"
+                app:met_floatingLabel="normal"
+                android:maxLength="6"
+                android:visibility="gone"
+                app:met_floatingLabelAlwaysShown="false"
+                app:met_floatingLabelAnimating="true"
+                app:met_floatingLabelPadding="8dp"
+                app:met_floatingLabelText="@string/otp"
+                app:met_floatingLabelTextSize="14dp"
+                app:met_helperText=""
+                app:met_helperTextAlwaysShown="false"
+                app:met_helperTextColor="@android:color/background_dark"
+                app:met_iconPadding="8dp"
+                app:met_singleLineEllipsis="true"
+                app:met_underlineColor="@color/white" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

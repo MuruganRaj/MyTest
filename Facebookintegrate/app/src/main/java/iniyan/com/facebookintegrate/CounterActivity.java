@@ -93,6 +93,7 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
 //
 //                        }
 
+
                         Log.e("reeeee",""+response);
 
                         mAdapter = new GroupAdapter(response);

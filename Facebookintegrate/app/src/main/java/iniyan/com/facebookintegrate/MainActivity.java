@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -58,6 +59,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -158,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
         preferences = getSharedPreferences("test", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
@@ -169,6 +173,25 @@ public class MainActivity extends AppCompatActivity {
         fbimage = (ImageView) findViewById(R.id.fbimage);
 
         tv_Timer = (TextView)findViewById(R.id.timer);
+
+        fbfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type = "image/*";
+                String filename = "/myPhoto.jpg";
+                File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+
+                String path = folder.getPath()+"/Camera/"+"IMG20181030065039.jpg";
+
+                Log.e("fileeeeee",path);
+
+                String mediaPath = Environment.getExternalStorageDirectory() + filename;
+
+                createInstagramIntent(type, path);
+
+
+            }
+        });
 //
 //
 //        videoView = (VideoView) findViewById(R.id.videoView);
@@ -197,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         apiService = ApiClient.getClient(getApplicationContext()).create(ApiService.class);
 
 
-        getGroup();
+//        getGroup();
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,14 +229,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fbfab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList(EMAIL));
-
-
-            }
-        });
+//        fbfab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList(EMAIL));
+//
+//
+//            }
+//        });
 
 
 
@@ -487,6 +510,24 @@ public class MainActivity extends AppCompatActivity {
         return bitmap;
     }
 
+    private void createInstagramIntent(String type, String mediaPath){
+
+        // Create the new Intent using the 'Send' action.
+        Intent share = new Intent(Intent.ACTION_SEND);
+
+        // Set the MIME type
+        share.setType(type);
+
+        // Create the URI from the media
+        File media = new File(mediaPath);
+        Uri uri = Uri.fromFile(media);
+
+        // Add the URI to the Intent.
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+
+        // Broadcast the Intent.
+        startActivity(Intent.createChooser(share, "Share to"));
+    }
 
     // DownloadImage AsyncTask
     public class DownloadImage extends AsyncTask<String, Void, Bitmap> {

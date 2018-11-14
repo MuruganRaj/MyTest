@@ -140,7 +140,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
                     } else {
 
                         myViewHolder.tvTime.setText("expired");
-                        myViewHolder.btnJoin.setVisibility(View.INVISIBLE);
+                        myViewHolder.btnJoin.setEnabled(false);
 //                        linear_layout_1.setVisibility(View.VISIBLE);
 //                        linear_layout_2.setVisibility(View.GONE);
                         handler.removeCallbacks(runnable);

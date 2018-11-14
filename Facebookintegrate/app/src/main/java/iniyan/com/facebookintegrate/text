@@ -1,0 +1,11 @@
+  CREATE EVENT my_groupfinal
+  ON SCHEDULE
+ EVERY 24 HOUR
+  DO
+update Create_group set group_status = case
+when group_count<10 then 'InActive'
+when group_count=10 then 'Completed'
+else group_status
+end
+where group_id >0 ;
+

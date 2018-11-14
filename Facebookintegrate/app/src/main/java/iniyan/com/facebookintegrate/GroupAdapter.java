@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,10 +28,11 @@ import iniyan.com.facebookintegrate.model.GetgroupsResponse;
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder> {
     private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    GetgroupsResponse[]  list = new GetgroupsResponse[0];
+    GetgroupsResponse[] list = new GetgroupsResponse[0];
     Runnable runnable;
     private android.os.Handler handler = new android.os.Handler();
-    public GroupAdapter( GetgroupsResponse[]  moviesList) {
+
+    public GroupAdapter(GetgroupsResponse[] moviesList) {
         this.list = moviesList;
     }
 
@@ -47,14 +49,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         GetgroupsResponse movie = list[position];
 
-        Log.e("adptaaaa",""+movie.getExpirydate());
-        holder.tvName.setText(""+movie.getFirstName());
+        Log.e("adptaaaa", "" + movie.getExpirydate());
+        holder.tvName.setText("" + movie.getFirstName());
 
-        int gcount = 10-Integer.parseInt(movie.getGroup_count());
+        int gcount = 10 - Integer.parseInt(movie.getGroup_count());
 
-        holder.tvCount.setText(gcount+ "people  \n  finish the group");
+        holder.tvCount.setText(gcount + "people  \n  finish the group");
 
-        countDownStart(movie.getExpirydate(),holder);
+        countDownStart(movie.getExpirydate(), holder);
 
 
     }
@@ -66,17 +68,18 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTime,tvName,tvCount;
+        TextView tvTime, tvName, tvCount;
         ImageView im_profile;
+        Button btnJoin;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            tvTime = (TextView)itemView.findViewById(R.id.genre);
-            tvCount = (TextView)itemView.findViewById(R.id.year);
-            tvName = (TextView)itemView.findViewById(R.id.title);
-
-            im_profile = (ImageView)itemView.findViewById(R.id.imageView);
+            tvTime = (TextView) itemView.findViewById(R.id.genre);
+            tvCount = (TextView) itemView.findViewById(R.id.year);
+            tvName = (TextView) itemView.findViewById(R.id.title);
+            btnJoin = (Button) itemView.findViewById(R.id.btnJoin);
+            im_profile = (ImageView) itemView.findViewById(R.id.imageView);
         }
     }
 
@@ -101,9 +104,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
     private void countDownStart(final String count, final MyViewHolder myViewHolder) {
 
 
-        final  String tempDate = parseDateToddMMyyyy(count);
+        final String tempDate = parseDateToddMMyyyy(count);
 //     final   long counthour = Long.parseLong(count);
-        Log.e("rewwwwwwwww",""+tempDate);
+        Log.e("rewwwwwwwww", "" + tempDate);
 
 
         runnable = new Runnable() {
@@ -118,15 +121,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
 
                     if (!current_date.after(event_date)) {
 
-                        long diff =  event_date.getTime() -current_date.getTime() ;
+                        long diff = event_date.getTime() - current_date.getTime();
 
-                        Log.e("diiddd",""+diff);
+                        Log.e("diiddd", "" + diff);
                         long Days = diff / (24 * 60 * 60 * 1000);
                         long Hours = diff / (60 * 60 * 1000) % 24;
                         long Minutes = diff / (60 * 1000) % 60;
                         long Seconds = diff / 1000 % 60;
 
-                            myViewHolder.tvTime.setText(Days+":"+Hours+":"+Minutes+":"+Seconds);
+                        myViewHolder.tvTime.setText(Days + ":" + Hours + ":" + Minutes + ":" + Seconds);
+                        myViewHolder.btnJoin.setVisibility(View.VISIBLE);
 
 //                        tv_days.setText(String.format("%02d", Days));
 //                        tv_hour.setText(String.format("%02d", Hours));
@@ -136,7 +140,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
                     } else {
 
                         myViewHolder.tvTime.setText("expired");
-
+                        myViewHolder.btnJoin.setVisibility(View.INVISIBLE);
 //                        linear_layout_1.setVisibility(View.VISIBLE);
 //                        linear_layout_2.setVisibility(View.GONE);
                         handler.removeCallbacks(runnable);

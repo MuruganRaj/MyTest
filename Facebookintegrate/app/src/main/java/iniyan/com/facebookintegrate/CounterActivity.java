@@ -30,7 +30,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class CounterActivity extends AppCompatActivity  implements View.OnClickListener {
+public class CounterActivity extends AppCompatActivity  implements View.OnClickListener,IAddGroupJion {
     private Button btn_start, btn_cancel;
     private TextView tv_timer;
     String date_time;
@@ -74,29 +74,9 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
                     public void onSuccess(Getgroups getgroups) {
                         GetgroupsResponse[]  response = getgroups.getResponse();
 
-//                        for(int i=0;i<response.length;i++){
-//                            int groupid=response[i].getGroup_id();
-//                            String  group_leader =response[i].getGroup_leader();
-//                            String  group_position =response[i].getGroup_leader();
-//                            String  group_count =response[i].getGroup_leader();
-//                            String  no_multy =response[i].getGroup_leader();
-//                            String  payment_status =response[i].getGroup_leader();
-//                            String  group_status =response[i].getGroup_leader();
-//                            String  orderid =response[i].getGroup_leader();
-//                            String  customer_id =response[i].getGroup_leader();
-//                            String  productlink =response[i].getGroup_leader();
-//                            String ProfileImage = response[i].getProfileImage();
-//                            String created_date = response[0].getCreated_date();
-//                            String timecount = response[1].getTimecount();
-//                            String expirydate = response[1].getExpirydate();
-//
-//
-//                        }
-
-
                         Log.e("reeeee",""+response);
 
-                        mAdapter = new GroupAdapter(response);
+                        mAdapter = new GroupAdapter(response,CounterActivity.this);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -111,13 +91,37 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
                     }
                 }));
 
-
     }
 
+    public  void addJoinGroup(int group_id,int customer_id,String join_status,int no_multy,String payment_status){
+
+        disposable.add(apiService.addGroupJoin(group_id,customer_id,join_status,no_multy,payment_status)
+                .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+
+                        Toast.makeText(CounterActivity.this, s, Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                }));
+
+    }
 
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void addjoin(int groupId, int customer_id, String join_status, int no_multy, String payment_status) {
+        addJoinGroup(groupId,customer_id,join_status,no_multy,payment_status);
     }
 
 //    private void init() {

@@ -1,5 +1,6 @@
 package iniyan.com.facebookintegrate;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Movie;
 import android.support.annotation.NonNull;
@@ -28,12 +29,14 @@ import iniyan.com.facebookintegrate.model.GetgroupsResponse;
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder> {
     private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    IAddGroupJion iAddGroupJion;
     GetgroupsResponse[] list = new GetgroupsResponse[0];
     Runnable runnable;
     private android.os.Handler handler = new android.os.Handler();
 
-    public GroupAdapter(GetgroupsResponse[] moviesList) {
+    public GroupAdapter(GetgroupsResponse[] moviesList, IAddGroupJion iAddGroupJion) {
         this.list = moviesList;
+        this.iAddGroupJion =iAddGroupJion;
     }
 
     @NonNull
@@ -47,14 +50,24 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        GetgroupsResponse movie = list[position];
+        final GetgroupsResponse movie = list[position];
 
         Log.e("adptaaaa", "" + movie.getExpirydate());
         holder.tvName.setText("" + movie.getFirstName());
 
-        int gcount = 10 - Integer.parseInt(movie.getGroup_count());
+
+        String tempvar =String.valueOf(movie.getCount());
+        int gcount = 10 - Integer.parseInt(tempvar);
 
         holder.tvCount.setText(gcount + "people  \n  finish the group");
+
+
+            holder.btnJoin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iAddGroupJion.addjoin(movie.getGroup_id(),234,"Y",0,"N");
+                }
+            });
 
         countDownStart(movie.getExpirydate(), holder);
 
@@ -101,6 +114,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
         return str;
     }
 
+
+
+
+
     private void countDownStart(final String count, final MyViewHolder myViewHolder) {
 
 
@@ -122,7 +139,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
                     if (!current_date.after(event_date)) {
 
                         long diff = event_date.getTime() - current_date.getTime();
-
                         Log.e("diiddd", "" + diff);
                         long Days = diff / (24 * 60 * 60 * 1000);
                         long Hours = diff / (60 * 60 * 1000) % 24;
@@ -152,5 +168,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
         };
         handler.postDelayed(runnable, 0);
     }
+
+
 
 }

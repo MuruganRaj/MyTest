@@ -58,7 +58,11 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
 
 
 
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         getGroup();
 
@@ -78,10 +82,7 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
                         Log.e("reeeee",""+response);
 
                         mAdapter = new GroupAdapter(response,CounterActivity.this);
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                        recyclerView.setLayoutManager(mLayoutManager);
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        recyclerView.setAdapter(mAdapter);
+                      recyclerView.setAdapter(mAdapter);
 
                         mAdapter.notifyDataSetChanged();
                     }
@@ -99,16 +100,18 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
 
         disposable.add(apiService.addGroupJoin(group_id,customer_id,join_status,no_multy,payment_status)
                 .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<JoinAddResponse>() {
                     @Override
                     public void onSuccess(JoinAddResponse s) {
                         Toast.makeText(CounterActivity.this, s.getMessage(), Toast.LENGTH_SHORT).show();
 
-                        Log.e("eerrrrr",s.getMessage());
                         getGroup();
 
-                        mAdapter.notifyDataSetChanged();
+//                        mAdapter.notifyDataSetChanged();
+
+
+                     //   mAdapter.notifyDataSetChanged();
 
 
 //                        mAdapter = new GroupAdapter(getgroupsResponse,CounterActivity.this);

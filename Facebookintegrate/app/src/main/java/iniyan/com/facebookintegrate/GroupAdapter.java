@@ -62,10 +62,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
         holder.tvCount.setText(gcount + "people  \n  finish the group");
 
 
+
+        if(Integer.parseInt(tempvar)==10){
+            holder.btnJoin.setEnabled(false);
+        }
+
             holder.btnJoin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    iAddGroupJion.addjoin(movie.getGroup_id(),234,"Y",0,"N");
+                    iAddGroupJion.addjoin(movie.getGroup_id(),234,"Y",0,"N",list);
                 }
             });
 

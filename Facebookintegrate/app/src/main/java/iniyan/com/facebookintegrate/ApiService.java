@@ -1,6 +1,7 @@
 package iniyan.com.facebookintegrate;
 
 import iniyan.com.facebookintegrate.model.Getgroups;
+import iniyan.com.facebookintegrate.model.JoinAddResponse;
 import io.reactivex.Single;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -42,8 +43,8 @@ public interface ApiService {
 
     @POST("http://18.224.1.148:3000/api/v1/addGroupJoin")
     //@Headers({"Authorization: Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxfSwiaWF0IjoxNTQxODI1MzIyfQ.kHhDydxbVz41m-OkI2lQ2ewvO6YgorYozDztdsSbf0s"})
-    Single<String> addGroupJoin(@Query("pGroup_id") int group_id,@Query("pCustomer_id") int customer_id,@Query("pJoin_status") String join_status,
-                                @Query("pNo_multy") int no_multy,@Query("pPayment_status") String payment_status);
+    Single<JoinAddResponse> addGroupJoin(@Query("pGroup_id") int group_id, @Query("pCustomer_id") int customer_id, @Query("pJoin_status") String join_status,
+                                         @Query("pNo_multy") int no_multy, @Query("pPayment_status") String payment_status);
 
 
 

@@ -25,6 +25,7 @@ import java.util.Date;
 
 import iniyan.com.facebookintegrate.model.Getgroups;
 import iniyan.com.facebookintegrate.model.GetgroupsResponse;
+import iniyan.com.facebookintegrate.model.JoinAddResponse;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -93,16 +94,31 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
 
     }
 
-    public  void addJoinGroup(int group_id,int customer_id,String join_status,int no_multy,String payment_status){
+
+    public  void addJoinGroup(int group_id,int customer_id,String join_status,int no_multy,String payment_status,final GetgroupsResponse[] getgroupsResponse){
 
         disposable.add(apiService.addGroupJoin(group_id,customer_id,join_status,no_multy,payment_status)
                 .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<String>() {
+                .subscribeWith(new DisposableSingleObserver<JoinAddResponse>() {
                     @Override
-                    public void onSuccess(String s) {
+                    public void onSuccess(JoinAddResponse s) {
+                        Toast.makeText(CounterActivity.this, s.getMessage(), Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(CounterActivity.this, s, Toast.LENGTH_SHORT).show();
+                        Log.e("eerrrrr",s.getMessage());
+                        getGroup();
+
+                        mAdapter.notifyDataSetChanged();
+
+
+//                        mAdapter = new GroupAdapter(getgroupsResponse,CounterActivity.this);
+//                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+//                        recyclerView.setLayoutManager(mLayoutManager);
+//                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//                        recyclerView.setAdapter(mAdapter);
+//                        mAdapter.notifyDataSetChanged();
+
+
 
                     }
 
@@ -120,8 +136,10 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
     }
 
     @Override
-    public void addjoin(int groupId, int customer_id, String join_status, int no_multy, String payment_status) {
-        addJoinGroup(groupId,customer_id,join_status,no_multy,payment_status);
+    public void addjoin(int groupId, int customer_id, String join_status, int no_multy, String payment_status,GetgroupsResponse[] getgroupsResponse) {
+        addJoinGroup(groupId,customer_id,join_status,no_multy,payment_status,getgroupsResponse);
+
+
     }
 
 //    private void init() {

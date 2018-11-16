@@ -2,7 +2,7 @@ package iniyan.com.facebookintegrate.model;
 
 public class JoinAddResponse {
     private int code;
-    private String message;
+    private JoinAddResponseMessage[] message;
 
     public int getCode() {
         return this.code;
@@ -12,11 +12,11 @@ public class JoinAddResponse {
         this.code = code;
     }
 
-    public String getMessage() {
+    public JoinAddResponseMessage[] getMessage() {
         return this.message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(JoinAddResponseMessage[] message) {
         this.message = message;
     }
 }

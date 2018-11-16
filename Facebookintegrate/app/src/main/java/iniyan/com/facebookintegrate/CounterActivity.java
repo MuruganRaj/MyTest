@@ -1,11 +1,6 @@
 package iniyan.com.facebookintegrate;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,14 +13,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import iniyan.com.facebookintegrate.model.Getgroups;
 import iniyan.com.facebookintegrate.model.GetgroupsResponse;
 import iniyan.com.facebookintegrate.model.JoinAddResponse;
+import iniyan.com.facebookintegrate.model.JoinAddResponseMessage;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -104,9 +98,19 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
                 .subscribeWith(new DisposableSingleObserver<JoinAddResponse>() {
                     @Override
                     public void onSuccess(JoinAddResponse s) {
-                        Toast.makeText(CounterActivity.this, s.getMessage(), Toast.LENGTH_SHORT).show();
 
-                        getGroup();
+                        JoinAddResponseMessage[] re = s.getMessage();
+
+                        for(int i=0;i<re.length;i++){
+
+                            String result = re[0].getResult();
+
+                            Toast.makeText(CounterActivity.this, result, Toast.LENGTH_SHORT).show();
+                            getGroup();
+                        }
+
+
+
 
 //                        mAdapter.notifyDataSetChanged();
 

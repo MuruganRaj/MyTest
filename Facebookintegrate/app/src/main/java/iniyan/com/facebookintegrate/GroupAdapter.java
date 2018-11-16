@@ -61,8 +61,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
 
         holder.tvCount.setText(gcount + "people  \n  finish the group");
 
-
-
         if(Integer.parseInt(tempvar)==10){
             holder.btnJoin.setEnabled(false);
         }
@@ -70,13 +68,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
             holder.btnJoin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    iAddGroupJion.addjoin(movie.getGroup_id(),234,"Y",0,"N",list);
+                    iAddGroupJion.addjoin(movie.getGroup_id(),700,"Y",0,"N",list);
                 }
             });
 
-        countDownStart(movie.getExpirydate(), holder);
+//        countDownStart(movie.getCreated_date(), holder);
 
-
+        setitme(holder, position,  movie);
     }
 
     @Override
@@ -121,21 +119,92 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
 
 
 
+    public void setitme ( final MyViewHolder myViewHolder,int position, GetgroupsResponse movie){
+
+        String [] dates = {"2018-11-17 13:50:12","2018-11-17 15:00:16","2018-11-15 20:00:00"};
+
+        String res =movie.getExpirydate();
+                final String tempDate = parseDateToddMMyyyy(res);
+
+//                String dae = dates[position];
+
+        countDownStart1(tempDate,myViewHolder);
 
 
-    private void countDownStart(final String count, final MyViewHolder myViewHolder) {
+
+//        for(int i=0;i<dates.length;i++){
+//        }
 
 
-        final String tempDate = parseDateToddMMyyyy(count);
+    }
+
+
+    private void countDownStart1(final String tempDate, final MyViewHolder myViewHolder) {
+
+
 //     final   long counthour = Long.parseLong(count);
+//        final String tempDate = parseDateToddMMyyyy(count);
         Log.e("rewwwwwwwww", "" + tempDate);
-
 
         runnable = new Runnable() {
             @Override
             public void run() {
                 try {
                     handler.postDelayed(this, 1000);
+
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                    Date event_date = dateFormat.parse(tempDate);
+                    Date current_date = new Date();
+
+                    if (!current_date.after(event_date)) {
+
+                        long diff = event_date.getTime() - current_date.getTime();
+                        Log.e("diiddd", "" + diff);
+                        long Days = diff / (24 * 60 * 60 * 1000);
+                        long Hours = diff / (60 * 60 * 1000) % 24;
+                        long Minutes = diff / (60 * 1000) % 60;
+                        long Seconds = diff / 1000 % 60;
+
+                        myViewHolder.tvTime.setText(Days + ":" + Hours + ":" + Minutes + ":" + Seconds);
+                        myViewHolder.btnJoin.setVisibility(View.VISIBLE);
+
+//                        tv_days.setText(String.format("%02d", Days));
+//                        tv_hour.setText(String.format("%02d", Hours));
+//                        tv_minute.setText(String.format("%02d", Minutes));
+//                        tv_second.setText(String.format("%02d", Seconds));
+
+                    } else {
+
+                        myViewHolder.tvTime.setText("expired");
+                        myViewHolder.btnJoin.setEnabled(false);
+//                        linear_layout_1.setVisibility(View.VISIBLE);
+//                        linear_layout_2.setVisibility(View.GONE);
+                        handler.removeCallbacks(runnable);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        handler.postDelayed(runnable, 0);
+    }
+
+
+
+    private void countDownStart(final String count, final MyViewHolder myViewHolder) {
+
+
+//     final   long counthour = Long.parseLong(count);
+        final String tempDate = parseDateToddMMyyyy(count);
+        Log.e("rewwwwwwwww", "" + tempDate);
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    handler.postDelayed(this, 1000);
+
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
                     Date event_date = dateFormat.parse(tempDate);

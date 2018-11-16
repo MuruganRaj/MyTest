@@ -27,11 +27,10 @@ import iniyan.com.facebookintegrate.model.GetgroupsResponse;
  */
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder> {
-    private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
     IAddGroupJion iAddGroupJion;
     GetgroupsResponse[] list = new GetgroupsResponse[0];
     Runnable runnable;
+    private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private android.os.Handler handler = new android.os.Handler();
 
     public GroupAdapter(GetgroupsResponse[] moviesList, IAddGroupJion iAddGroupJion) {
@@ -82,23 +81,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
         return list.length;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        TextView tvTime, tvName, tvCount;
-        ImageView im_profile;
-        Button btnJoin;
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-
-            tvTime = (TextView) itemView.findViewById(R.id.genre);
-            tvCount = (TextView) itemView.findViewById(R.id.year);
-            tvName = (TextView) itemView.findViewById(R.id.title);
-            btnJoin = (Button) itemView.findViewById(R.id.btnJoin);
-            im_profile = (ImageView) itemView.findViewById(R.id.imageView);
-        }
-    }
-
     public String parseDateToddMMyyyy(String time) {
         String inputPattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         String outputPattern = "yyyy-MM-dd HH:mm:ss";
@@ -117,27 +99,21 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
         return str;
     }
 
-
-
     public void setitme ( final MyViewHolder myViewHolder,int position, GetgroupsResponse movie){
 
-        String [] dates = {"2018-11-17 13:50:12","2018-11-17 15:00:16","2018-11-15 20:00:00"};
 
         String res =movie.getExpirydate();
                 final String tempDate = parseDateToddMMyyyy(res);
 
-//                String dae = dates[position];
 
         countDownStart1(tempDate,myViewHolder);
 
 
 
-//        for(int i=0;i<dates.length;i++){
-//        }
+//
 
 
     }
-
 
     private void countDownStart1(final String tempDate, final MyViewHolder myViewHolder) {
 
@@ -190,8 +166,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
         handler.postDelayed(runnable, 0);
     }
 
-
-
     private void countDownStart(final String count, final MyViewHolder myViewHolder) {
 
 
@@ -241,6 +215,23 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
             }
         };
         handler.postDelayed(runnable, 0);
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        TextView tvTime, tvName, tvCount;
+        ImageView im_profile;
+        Button btnJoin;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+
+            tvTime = (TextView) itemView.findViewById(R.id.genre);
+            tvCount = (TextView) itemView.findViewById(R.id.year);
+            tvName = (TextView) itemView.findViewById(R.id.title);
+            btnJoin = (Button) itemView.findViewById(R.id.btnJoin);
+            im_profile = (ImageView) itemView.findViewById(R.id.imageView);
+        }
     }
 
 

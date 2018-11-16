@@ -108,7 +108,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
 
         countDownStart1(tempDate,myViewHolder);
 
-
+//        SELECT CONVERT_TZ(DATE_FORMAT(NOW(), '%Y-%m-%d %T'),'+00:00','-06:00');
 
 //
 

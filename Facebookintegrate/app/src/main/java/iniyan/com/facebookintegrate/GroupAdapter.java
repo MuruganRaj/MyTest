@@ -67,7 +67,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
             holder.btnJoin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    iAddGroupJion.addjoin(movie.getGroup_id(),700,"Y",0,"N",list);
+                    iAddGroupJion.addjoin(movie.getGroup_id(),12,"Y",0,"N",list);
                 }
             });
 
@@ -114,6 +114,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
 
 
     }
+
+
+
+
 
     private void countDownStart1(final String tempDate, final MyViewHolder myViewHolder) {
 

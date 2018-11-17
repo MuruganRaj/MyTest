@@ -18,6 +18,8 @@ import java.util.Calendar;
 
 import iniyan.com.facebookintegrate.model.Getgroups;
 import iniyan.com.facebookintegrate.model.GetgroupsResponse;
+import iniyan.com.facebookintegrate.model.GroupCount;
+import iniyan.com.facebookintegrate.model.GroupCountResponse;
 import iniyan.com.facebookintegrate.model.JoinAddResponse;
 import iniyan.com.facebookintegrate.model.JoinAddResponseMessage;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,19 +28,17 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class CounterActivity extends AppCompatActivity  implements View.OnClickListener,IAddGroupJion {
-    private Button btn_start, btn_cancel;
-    private TextView tv_timer;
     String date_time;
     Calendar calendar;
     SimpleDateFormat simpleDateFormat;
     EditText et_hours;
-    private CompositeDisposable disposable = new CompositeDisposable();
-    private ApiService apiService;
-
     SharedPreferences mpref;
     SharedPreferences.Editor mEditor;
-
-
+    TextView tv_count ;
+    private Button btn_start, btn_cancel;
+    private TextView tv_timer;
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private ApiService apiService;
     private RecyclerView recyclerView;
     private GroupAdapter mAdapter;
     @Override
@@ -51,7 +51,7 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
 
 
 
-
+        tv_count = (TextView)findViewById(R.id.tvCount);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -59,6 +59,7 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         getGroup();
+        getGroupCount();
 
 //        init();
 //        listener();
@@ -76,7 +77,7 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
                         Log.e("reeeee",""+response);
 
                         mAdapter = new GroupAdapter(response,CounterActivity.this);
-                      recyclerView.setAdapter(mAdapter);
+                       recyclerView.setAdapter(mAdapter);
 
                         mAdapter.notifyDataSetChanged();
                     }
@@ -88,6 +89,34 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
                 }));
 
     }
+
+
+
+    private void getGroupCount(){
+        disposable.add(apiService.getGroupCount().subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeWith(new DisposableSingleObserver<GroupCount>() {
+            @Override
+            public void onSuccess(GroupCount groupCount) {
+
+                GroupCountResponse[] gp = groupCount.getResponse();
+
+            for(int i=0;i<gp.length;i++){
+                int count =gp[i].getGroup_count();
+                tv_count.setText("Total Group : "+count);
+
+            }
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        }));
+
+    }
+
 
 
     public  void addJoinGroup(int group_id,int customer_id,String join_status,int no_multy,String payment_status,final GetgroupsResponse[] getgroupsResponse){
@@ -107,6 +136,7 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
 
                             Toast.makeText(CounterActivity.this, result, Toast.LENGTH_SHORT).show();
                             getGroup();
+
                         }
 
 

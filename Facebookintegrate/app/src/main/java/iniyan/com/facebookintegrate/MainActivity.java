@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -57,6 +58,14 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.ShareMediaContent;
+import com.facebook.share.model.ShareMessengerMediaTemplateContent;
+import com.facebook.share.model.ShareMessengerURLActionButton;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONException;
@@ -187,6 +196,11 @@ public class MainActivity extends AppCompatActivity {
 //        feedback();
 
 
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         preferences = getSharedPreferences("test", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
@@ -235,10 +249,10 @@ public class MainActivity extends AppCompatActivity {
 
                 //messenger working
 
-//                String path = MediaStore.Images.Media.insertImage(getContentResolver(), image, "Refer and Earn", null);
-//                Uri fileUri = Uri.parse(path);
-//
-//
+                String path = MediaStore.Images.Media.insertImage(getContentResolver(), image, "Refer and Earn", null);
+                Uri fileUri = Uri.parse(path);
+////
+////
 //                Intent sendIntent = new Intent();
 //                sendIntent.setAction(Intent.ACTION_SEND);
 //
@@ -259,25 +273,116 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+                //face book share with content
+
+
+//                ShareDialog    shareDialog = new ShareDialog(MainActivity.this);  // initialize facebook shareDialog.
+//
+//                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+//                        .setContentTitle("Amazing Product")
+//                        .setImageUrl(Uri.parse("http://18.224.1.148:3000/images/img_1.png"))
+//                                        .setContentDescription(
+//                                                "This product very low price hust INR.2999")
+//                                                        .setContentUrl(Uri.parse("https://www.amazon.in/Sanyo-123-2-inches-XT-49S7100F-Black/dp/B01ICVLK4I/ref=gbph_img_m-2_1baa_cb589843?smid=AT95IG9ONZD7S&pf_rd_p=59bc242a-90c9-4c2b-8a7f-5efdecf61baa&pf_rd_s=merchandised-search-2&pf_rd_t=101&pf_rd_i=1389396031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_r=GWE5G8Q8R5DRTT9N3DX0"))
+//                                                                        .build();
+//
+//
+//                shareDialog.show(linkContent);  // Show facebook ShareDialog
+
+
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent
+                        .putExtra(Intent.EXTRA_TEXT,
+                                "Hello.");
+                sendIntent.setType("text/plain");
+                sendIntent.setType("image/*");
+                sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                sendIntent.setPackage("com.facebook.orca");
+                try {
+                    startActivity(sendIntent);
+                }
+                catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getApplicationContext(),"Please Install Facebook Messenger", Toast.LENGTH_LONG).show();
+                }
+
+
+
+                ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
+                        .setContentTitle("Your Title")
+                        .setContentDescription("Your Description")
+                        .setContentUrl(Uri.parse("URL[will open website or app]"))
+                        .setImageUrl(Uri.parse("image or logo [if playstore or app store url then no need of this image url]"))
+                        .build();
+
+
+//                ShareMessengerURLActionButton actionButton =
+//                        new ShareMessengerURLActionButton.Builder()
+//                                .setTitle("Visit Facebook")
+//                                .setUrl(Uri.parse("https://www.facebook.com"))
+//                                .build();
+//
+//                ShareMessengerMediaTemplateContent mediaTemplateContent =
+//                        new ShareMessengerMediaTemplateContent.Builder()
+//                                .setPageId("Your page ID") // Your page ID, required
+//                                .setMediaType(ShareMessengerMediaTemplateContent.MediaType.IMAGE)
+//                                .setAttachmentId("Attachment Id") // AttachmentID, see media template documentation for how to upload an attachment
+//                                .setButton(actionButton)
+//                                .build();
+
+
+
+
+
+
+
+
+//                                MessageDialog.show(mediaTemplateContent);  // Show facebook ShareDialog
+
+
+
+//                ShareContent shareContent = new ShareMediaContent.Builder()
+//                        .addMedium(sharePhoto1)
+//                        .addMedium(sharePhoto2)
+//                        .addMedium(shareVideo1)
+//                        .addMedium(shareVideo2)
+//                        .build();
+
+
+
+//                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+////                sharingIntent.setType("image/jpeg");
+////                sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+//                sharingIntent.putExtra(Intent.EXTRA_TEXT, "http://www.google.com");
+////                sharingIntent.putExtra(Intent.EXTRA_TEXT, _text);
+//                sharingIntent.putExtra(Intent.EXTRA_STREAM,fileUri);  //optional//use this when you want to send an image
+//                sharingIntent.setType("image/jpeg");
+//                sharingIntent.setType("text/plain","image/*");
+//
+//                sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+
+
              //facebook sharing working
 
 //                Drawable mDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.earn, null);
 //                Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-
-                image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-                String path = MediaStore.Images.Media.insertImage(getContentResolver(), image, "Refer and Earn", null);
-                Uri fileUri = Uri.parse(path);
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, "Your Promocode is And Checkout PayPre ");
-                intent.putExtra(Intent.EXTRA_HTML_TEXT, " And Checkout PayPre ");
-                intent.putExtra(Intent.EXTRA_STREAM, fileUri);
-                intent.setType("image/jpeg");
-                intent.setPackage("com.facebook.katana");
-                startActivity(intent);
+//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//                image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//                String path = MediaStore.Images.Media.insertImage(getContentResolver(), image, "Refer and Earn", null);
+//                Uri fileUri = Uri.parse(path);
+//                Intent intent = new Intent();
+//                intent.setAction(Intent.ACTION_SEND);
+//                intent.setType("text/plain");
+//                intent.putExtra(Intent.EXTRA_TEXT, "Your Promocode is And Checkout PayPre ");
+//                intent.putExtra(Intent.EXTRA_HTML_TEXT, " And Checkout PayPre ");
+//                intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+//                intent.setType("image/*");
+//                intent.setPackage("com.facebook.katana");
+//                startActivity(intent);
 
 
 
@@ -328,6 +433,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
 
 
 

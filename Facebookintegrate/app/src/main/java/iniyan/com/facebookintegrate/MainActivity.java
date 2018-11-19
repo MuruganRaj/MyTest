@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,9 +21,11 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -87,36 +91,56 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String EMAIL = "email";
     ProfilePictureView profilePictureView;
     CallbackManager callbackManager;
-    private static final String EMAIL = "email";
     ProfileTracker profileTracker = null;
     LoginButton loginButton;
     ImageView profileImage, fbimage;
     TextView logout;
     Button fbfab;
-    private ApiService apiService;
     String TAG = MainActivity.class.getSimpleName();
-    private CompositeDisposable disposable = new CompositeDisposable();
     String email, firstName, lastName, userName, id;
     Uri imageUrl;
-
     MaterialEditText etOtp;
-
     VideoView videoView;
-    private int mCurrentPosition = 0;
-
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-
     TextView tv_Timer ;
-
-
+    private ApiService apiService;
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private int mCurrentPosition = 0;
     private Handler handler = new Handler();
     private Runnable runnable;
 
     private String EVENT_DATE_TIME = "2018-12-31 10:30:00";
     private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    public static Bitmap getFacebookProfilePicture(String userID) throws IOException {
+        URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+        Bitmap bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+
+        return bitmap;
+    }
+
+    public static String getRandomNumberString() {
+        // It will generate 6 digit random Number.
+        // from 0 to 999999
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+
+        // this will convert any number sequence into 6 character.
+        return String.format("%06d", number);
+    }
+//private BroadcastReceiver receiver = new BroadcastReceiver() {
+//    @Override
+//    public void onReceive(Context context, Intent intent) {
+//        if(intent.getAction().equalsIgnoreCase("otp")){
+//            final String message=intent.getStringExtra("message");
+//            etOtp.setText(message);
+//        }
+//    }
+//};
 
     @Override
     protected void onStart() {
@@ -127,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.print("ssssss" + isLoggedIn);
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +184,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+//        feedback();
+
 
         preferences = getSharedPreferences("test", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -177,17 +202,83 @@ public class MainActivity extends AppCompatActivity {
         fbfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String type = "image/*";
-                String filename = "/myPhoto.jpg";
-                File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+//                String type = "image/*";
+//                String filename = "/myPhoto.jpg";
+//                File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+//
+//                String path = folder.getPath()+"/Camera/"+"IMG20181030065039.jpg";
+//
+//                Log.e("fileeeeee",path);
+//
+//                String mediaPath = Environment.getExternalStorageDirectory() + filename;
+//
+//                createInstagramIntent(type, path);
 
-                String path = folder.getPath()+"/Camera/"+"IMG20181030065039.jpg";
 
-                Log.e("fileeeeee",path);
+                URL url = null;
+                try {
+                    url = new URL("http://18.224.1.148:3000/images/img_1.png");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                Bitmap image = null;
+                try {
+                     image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                String mediaPath = Environment.getExternalStorageDirectory() + filename;
+//                Drawable mDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.test, null);
+//                Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
 
-                createInstagramIntent(type, path);
+
+
+                //messenger working
+
+//                String path = MediaStore.Images.Media.insertImage(getContentResolver(), image, "Refer and Earn", null);
+//                Uri fileUri = Uri.parse(path);
+//
+//
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//
+////                sendIntent.setType("text/plain");
+//                sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+//                sendIntent.setType("image/jpeg");
+//                sendIntent.putExtra(Intent.EXTRA_TEXT, "Your Promocode is Rs.232 And Checkout PayPre http:localhost/product ");
+//                sendIntent.putExtra(Intent.EXTRA_HTML_TEXT, " And Checkout PayPre http:localhost/produc");
+//
+//                sendIntent.setPackage("com.facebook.orca");
+//
+//                try {
+//                    startActivity(sendIntent);
+//                }
+//                catch (android.content.ActivityNotFoundException ex) {
+//                    Toast.makeText(getApplicationContext(),"Please Install Facebook Messenger", Toast.LENGTH_LONG).show();
+//                }
+
+
+
+             //facebook sharing working
+
+//                Drawable mDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.earn, null);
+//                Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+                image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+                String path = MediaStore.Images.Media.insertImage(getContentResolver(), image, "Refer and Earn", null);
+                Uri fileUri = Uri.parse(path);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, "Your Promocode is And Checkout PayPre ");
+                intent.putExtra(Intent.EXTRA_HTML_TEXT, " And Checkout PayPre ");
+                intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                intent.setType("image/jpeg");
+                intent.setPackage("com.facebook.katana");
+                startActivity(intent);
+
 
 
             }
@@ -450,15 +541,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-//private BroadcastReceiver receiver = new BroadcastReceiver() {
-//    @Override
-//    public void onReceive(Context context, Intent intent) {
-//        if(intent.getAction().equalsIgnoreCase("otp")){
-//            final String message=intent.getStringExtra("message");
-//            etOtp.setText(message);
-//        }
-//    }
-//};
 
     public Boolean checkRequestPermisstion(){
         int permissionSendMessage = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
@@ -486,13 +568,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
     @Override
     public void onDestroy() {
@@ -501,13 +581,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (profileTracker != null)
             profileTracker.stopTracking();
-    }
-
-    public static Bitmap getFacebookProfilePicture(String userID) throws IOException {
-        URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
-        Bitmap bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-
-        return bitmap;
     }
 
     private void createInstagramIntent(String type, String mediaPath){
@@ -528,45 +601,6 @@ public class MainActivity extends AppCompatActivity {
         // Broadcast the Intent.
         startActivity(Intent.createChooser(share, "Share to"));
     }
-
-    // DownloadImage AsyncTask
-    public class DownloadImage extends AsyncTask<String, Void, Bitmap> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... URL) {
-
-            String imageURL = URL[0];
-
-            Bitmap bitmap = null;
-            try {
-                // Download Image from URL
-                InputStream input = new java.net.URL(imageURL).openStream();
-                // Decode Bitmap
-                bitmap = BitmapFactory.decodeStream(input);
-                //   SaveImage(bitmap);
-                Log.e("bitmap", "" + bitmap);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            // Set the bitmap into ImageView
-            fbimage.setImageBitmap(result);
-        }
-
-
-    }
-
 
     private void getGroup(){
         disposable.add(apiService.getGroup().subscribeOn(Schedulers.io())
@@ -697,7 +731,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendOtp(String mobileNo, final String otp){
 
         disposable.add(apiService.sendSMS("8754137753","admin123",
-                "murugG4U9pJrPny3Xjio07Klfca","Your Molc otp is "+otp,mobileNo)
+                "murugG4U9pJrPny3Xjio07Klfca","Your Molc otp is : "+otp,mobileNo)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeWith(new DisposableSingleObserver<SMSResponse>() {
@@ -712,6 +746,9 @@ public class MainActivity extends AppCompatActivity {
                     editor.commit();
 
                      etOtp.setVisibility(View.VISIBLE);
+                }else {
+                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+
                 }
                 Log.e("errrrrrr",""+message);
 
@@ -751,7 +788,6 @@ public class MainActivity extends AppCompatActivity {
 
                  }else if(mobileNo.length()<10){
                      Toast.makeText(MainActivity.this, "Enter 10 digit Mobile No", Toast.LENGTH_SHORT).show();
-
 
                  }   else{
                      etMobile.setEnabled(false);
@@ -815,14 +851,42 @@ public class MainActivity extends AppCompatActivity {
         b.show();
     }
 
-    public static String getRandomNumberString() {
-        // It will generate 6 digit random Number.
-        // from 0 to 999999
-        Random rnd = new Random();
-        int number = rnd.nextInt(999999);
+    // DownloadImage AsyncTask
+    public class DownloadImage extends AsyncTask<String, Void, Bitmap> {
 
-        // this will convert any number sequence into 6 character.
-        return String.format("%06d", number);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... URL) {
+
+            String imageURL = URL[0];
+
+            Bitmap bitmap = null;
+            try {
+                // Download Image from URL
+                InputStream input = new java.net.URL(imageURL).openStream();
+                // Decode Bitmap
+                bitmap = BitmapFactory.decodeStream(input);
+                //   SaveImage(bitmap);
+                Log.e("bitmap", "" + bitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            // Set the bitmap into ImageView
+            fbimage.setImageBitmap(result);
+        }
+
+
     }
 
 

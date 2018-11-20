@@ -9,3 +9,61 @@ else group_status
 end
 where group_id >0 ;
 
+
+
+app.get('/api/v1/getProductList_new',ensureToken,function(req,res){
+
+        jwt.verify(req.token,'molc',function(err,data){
+
+                if(err){
+             res.send(403);
+
+        }else{
+var query = pool.query("select s.subcat_name, c.category_name,p.* from product_new p  join category c on  (c.category_id=p.category_id)   join subcategory s on (p.subcategory_id=s.subcat_id)",function(err,rows){
+
+   if(err){
+console.log("error"+err);
+
+}else{
+
+if(rows.length>0){
+        res.send({"response":rows,
+        data:data});
+
+}else{
+        res.send({"response":"No Data Found",data:data});
+
+}
+
+}
+
+
+});
+
+
+
+}
+});
+
+});
+
+
+
+app.post('/api/v1/addReview',ensureToken,function(req,res){
+jwt.verify(req.token,'molc',function(err,data){
+if(err){
+        res.sedStatus(403);
+}else{
+
+        var query=pool.query('insert  product_review set ?',req.body,function(err,rows){
+
+if(err){
+        res.json({status:400,message:err})
+}else{
+
+        res.json({status:200,message:"Review Added"})
+
+}
+});
+}});
+});

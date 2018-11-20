@@ -192,8 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-//        feedback();
+        feedback();
 
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -444,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(MainActivity.this, "Received", Toast.LENGTH_SHORT).show();
 //                if(provider.toLowerCase().contains("paypre"))
-                    if(messageText.contains("Your Molc otp is "))
+//                    if(messageText.contains("Your Molc otp is "))
                         etOtp.setText(messageText.replaceAll("[^0-9]", ""));
             }
         });
@@ -498,7 +497,6 @@ public class MainActivity extends AppCompatActivity {
 //                            e.printStackTrace();
 //                        }
 
-
                         // on createView method
 
 //                        try {
@@ -517,7 +515,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                         Toast.makeText(getApplicationContext(), "Success" + name, Toast.LENGTH_SHORT).show();
-
 
                         FacebookSdk.sdkInitialize(getApplicationContext());
                         callbackManager = CallbackManager.Factory.create();
@@ -542,14 +539,7 @@ public class MainActivity extends AppCompatActivity {
                                     id = currentProfile.getId();
 
 
-
-
-
-
-
-
-
-//https://graph.facebook.com/1002241683260851/picture?height=200&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D
+             //https://graph.facebook.com/1002241683260851/picture?height=200&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D
 
 
                                     // profilePictureView.setProfileId(name);
@@ -837,7 +827,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendOtp(String mobileNo, final String otp){
 
         disposable.add(apiService.sendSMS("8754137753","admin123",
-                "murugG4U9pJrPny3Xjio07Klfca","Your Molc otp is : "+otp,mobileNo)
+                "murugG4U9pJrPny3Xjio07Klfca",otp+" is Your Molc otp ",mobileNo)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeWith(new DisposableSingleObserver<SMSResponse>() {

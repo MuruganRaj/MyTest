@@ -67,3 +67,12 @@ if(err){
 });
 }});
 });
+
+
+
+
+
+
+
+
+git init , git add --all, git remote add origin <remote url>, git commit -m "some comment", git push -f origin master

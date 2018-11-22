@@ -1,9 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="iniyan.com.facebookintegrate.PaymentActivity">
 
-</android.support.constraint.ConstraintLayout>
+<ScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="fill_parent"
+
+    android:layout_height="fill_parent">
+
+
+
+    <LinearLayout
+
+        android:layout_width="fill_parent"
+
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+
+        android:weightSum="1">
+
+
+
+        <LinearLayout
+
+            android:layout_width="fill_parent"
+
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:text="Paytm Integration"
+
+                android:textStyle="bold"
+
+                android:textSize="18dip"
+
+                android:layout_gravity="center_horizontal"
+
+                android:layout_marginBottom="10dip"/>
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+
+                android:text="Order Id : "
+
+                android:textSize="20sp"/>
+
+            <TextView
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/order_id"
+
+                android:layout_weight="1"
+
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+
+
+        <EditText
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:id="@+id/edt_email"
+
+            android:hint="Enter Email"/>
+
+        <EditText
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:id="@+id/edt_mobile"
+
+            android:hint="Enter Mobile No"/>
+
+        <EditText
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:id="@+id/edt_amount"
+
+            android:hint="Enter Amount"/>
+
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+
+                android:text="Order Response : "
+
+                android:textSize="20sp"/>
+
+            <EditText
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/order_res"
+
+                android:editable="false"/>
+
+        </LinearLayout>
+
+
+
+        <Button
+
+            android:layout_width="217dp"
+
+            android:layout_height="wrap_content"
+
+            android:id="@+id/start_transaction"
+
+            android:text="Pay"
+
+            android:onClick="onStartTransaction"
+
+            android:layout_gravity="center"
+
+            android:textStyle="bold"
+
+            android:textSize="16dip"
+
+            android:layout_marginTop="10dip"
+
+            android:layout_weight="2.05" />
+
+
+
+    </LinearLayout>
+
+
+
+</ScrollView>

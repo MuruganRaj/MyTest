@@ -58,8 +58,12 @@ public class CounterActivity extends AppCompatActivity  implements View.OnClickL
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+
+
         getGroup();
         getGroupCount();
+
+
 
 //        init();
 //        listener();

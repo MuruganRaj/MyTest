@@ -14,15 +14,15 @@ function route(request,response){
 		case '/generate_checksum':
 			if(request.method == 'POST'){
 			var paramarray = {};
-				paramarray['MID'] = 'Premat36936345160441'; //Provided by Paytm
-				paramarray['ORDER_ID'] = 'ORDER00001'; //unique OrderId for every request
+				paramarray['MID'] = ''; //Provided by Paytm
+				paramarray['ORDER_ID'] = ''; //unique OrderId for every request
 				paramarray['CUST_ID'] = 'CUST0001';  // unique customer identifier 
 				paramarray['INDUSTRY_TYPE_ID'] = 'Retail'; //Provided by Paytm
-				paramarray['CHANNEL_ID'] = 'WAP'; //Provided by Paytm
+				paramarray['CHANNEL_ID'] = ''; //Provided by Paytm
 				paramarray['TXN_AMOUNT'] = '1.00'; // transaction amount
 				paramarray['WEBSITE'] = 'https://paytm.com/'; //Provided by Paytm
 				paramarray['CALLBACK_URL'] = 'https://pguat.paytm.com/paytmchecksum/paytmCallback.jsp';//Provided by Paytm
-				paramarray['EMAIL'] = 'muruga4046@gmail.com'; // customer email id
+				paramarray['EMAIL'] = ''; // customer email id
 				paramarray['MOBILE_NO'] = '9999999999'; // customer 10 digit mobile no.
 					paytm_checksum.genchecksum(paramarray, paytm_config.MERCHANT_KEY, function (err, res) {
 						response.writeHead(200, {'Content-type' : 'text/json','Cache-Control': 'no-cache'});

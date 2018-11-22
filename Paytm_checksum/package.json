@@ -1,0 +1,12 @@
+{
+  "name": "checksum",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+   
+    "serve-favicon": "~2.3.0"
+  }
+}

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.paytm.pgsdk.PaytmMerchant;
 import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPGService;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
@@ -41,33 +42,47 @@ public class PaymentActivity extends AppCompatActivity {
     TextView order_id_txt;
     EditText order_res;
     EditText edt_email,edt_mobile,edt_amount;
+
+    String url = "http://18.224.1.148:8080/generate_checksum";
+//    String url="http://localhost/Paytm/generateChecksum.php";
     HashMap paramMap = new HashMap();
     String mid="MID",order_id="ORDER_ID",cust_id="CUST_ID",callback="CALLBACK",industry_type="INDUS_TYPE",txn_amount="TXN_AMOUNT",checksum="CHECKSUM",mobile="MOBILE_NO",email="EMAIL",channel_id="CHANNEL_ID";
     String website="WEBSITE";
 
-    String url = "http://18.224.1.148:8080/generate_checksum";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
-
-//        runtime permission
-        if (ContextCompat.checkSelfPermission(PaymentActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(PaymentActivity.this, new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS}, 101);
-        }
-
+        initOrderId();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         edt_email = (EditText)findViewById(R.id.edt_email);
         edt_mobile = (EditText)findViewById(R.id.edt_mobile);
         edt_amount = (EditText)findViewById(R.id.edt_amount);
 
-
-        edt_email.setText("muruga4046@gmail.com");
-        edt_mobile.setText("8754137753");
-        edt_amount.setText("10");
+        edt_email.setText("abc@gmail.com");
+        edt_mobile.setText("9999999999");
+        edt_amount.setText("1.00");
 
     }
+
+    // This is to refresh the order id: Only for the Sample App’s purpose.
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initOrderId();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
+    private void initOrderId() {
+        Random r = new Random(System.currentTimeMillis());
+        orderId = "ORDER" + (1 + r.nextInt(2)) * 10000
+                + r.nextInt(10000);
+        order_id_txt = (TextView)findViewById(R.id.order_id);
+        order_id_txt.setText(orderId);
+
+    }
+
     public void onStartTransaction(View view) throws InterruptedException, ExecutionException {
 
         if(edt_email.getText().toString().equalsIgnoreCase("")){
@@ -81,14 +96,16 @@ public class PaymentActivity extends AppCompatActivity {
             PaytmPGService Service = PaytmPGService.getStagingService();
             //PaytmPGService Service = PaytmPGService.getProductionService();
 
+
+
             Log.d("before request", "some");
             String edtemail = edt_email.getText().toString().trim();
             String edtmobile = edt_mobile.getText().toString().trim();
             String edtamount = edt_amount.getText().toString().trim();
-
+            JSONObject postData = new JSONObject();
 
             HashMap<String, String> stringHashMap = new HashMap<>();
-            stringHashMap.put("orderid", orderId);
+            stringHashMap.put("orderid", "ORDER01");
             stringHashMap.put("email", edtemail);
             stringHashMap.put("mobile", edtmobile);
             stringHashMap.put("amount", edtamount);
@@ -103,6 +120,20 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
+    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for(Map.Entry<String, String> entry : params.entrySet()){
+            if (first)
+                first = false;
+            else
+                result.append("&");
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+        return result.toString();
+    }
 
     private class SendDeviceDetails extends AsyncTask<String, Void, String> {
 
@@ -216,8 +247,8 @@ public class PaymentActivity extends AppCompatActivity {
                         public void onTransactionResponse(Bundle inResponse) {
                             Log.d("LOG", "Payment Transaction :" + inResponse);
                             Toast.makeText(getApplicationContext(), "Payment Transaction response " + inResponse.toString(), Toast.LENGTH_LONG).show();
-//                            order_res = (EditText)findViewById(R.id.order_res);
-//                            order_res.setText(inResponse.toString());
+                            order_res = (EditText)findViewById(R.id.order_res);
+                            order_res.setText(inResponse.toString());
 
                             String response=inResponse.getString("RESPMSG");
                             if (response.equals("Txn Successful."))
@@ -282,34 +313,5 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
-
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
-            if (first)
-                first = false;
-            else
-                result.append("&");
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-        return result.toString();
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        initOrderId();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    }
-
-    private void initOrderId() {
-        Random r = new Random(System.currentTimeMillis());
-        orderId = "ORDER" + (1 + r.nextInt(2)) * 10000
-                + r.nextInt(10000);
-        order_id_txt = (TextView)findViewById(R.id.order_id);
-        order_id_txt.setText(orderId);
-
-    }
 }
+

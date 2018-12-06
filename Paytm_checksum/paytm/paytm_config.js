@@ -1,9 +1,9 @@
 module.exports = {
   paytm_config: {
-		MID: '',
-		WEBSITE: 'https://paytm.com/',
+		MID: 'MOLCSt58360354732076',
+		WEBSITE: 'WEBSTAGING',
     CHANNEL_ID: 'WAP',
     INDUSTRY_TYPE_ID: 'Retail',
-    MERCHANT_KEY : ''
+    MERCHANT_KEY : '7jyUyjKLyIXF6CrL'
 	}
 }
